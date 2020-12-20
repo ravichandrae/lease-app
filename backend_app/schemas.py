@@ -1,19 +1,19 @@
-from typing import List, Optional
-
 from pydantic import BaseModel
 
 
 class UserBase(BaseModel):
     mobile: str
+    name: str
 
 
 class UserCreate(UserBase):
-    name: str
+    pass
 
 
 class User(UserBase):
     id: int
-    is_active: bool
+    mobile: str
+    name: str
 
     class Config:
         orm_mode = True
