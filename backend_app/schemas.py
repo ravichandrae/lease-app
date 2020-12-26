@@ -3,7 +3,6 @@ from pydantic import BaseModel
 
 class UserBase(BaseModel):
     mobile: str
-    name: str
 
 
 class UserCreate(UserBase):
@@ -17,3 +16,19 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class UserLogin(UserBase):
+    mobile: str
+    otp: str
+
+    class Config:
+        orm_mode = True
+
+
+class UserLoginResponse(UserBase):
+    message: str
+
+    class Config:
+        orm_mode = True
+
