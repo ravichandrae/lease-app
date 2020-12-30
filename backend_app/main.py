@@ -64,3 +64,8 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
     if db_user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_user
+
+
+@app.post("/machines/", response_model=schemas.Machine)
+def create_machine(machine: schemas.Machine, db: Session = Depends(get_db)):
+    return dal.create_machine(db=db, machine=machine)

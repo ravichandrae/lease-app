@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
-import models, schemas
+import models
+import schemas
 
 
 def get_user(db: Session, user_id: int):
@@ -21,3 +22,11 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def create_machine(db: Session, machine: schemas.Machine):
+    db_machine = models.Machine(type=machine.type, rate_card=machine.rate_card, user=machine.user)
+    db.add(db_machine)
+    db.commit()
+    db.refresh(db_machine)
+    return db_machine
