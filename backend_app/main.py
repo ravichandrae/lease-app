@@ -67,5 +67,10 @@ def read_user(user_id: int, db: Session = Depends(get_db)):
 
 
 @app.post("/machines/", response_model=schemas.Machine)
-def create_machine(machine: schemas.Machine, db: Session = Depends(get_db)):
+def create_machine(machine: schemas.MachineCreate, db: Session = Depends(get_db)):
     return dal.create_machine(db=db, machine=machine)
+
+
+@app.post("/machine_types/", response_model=schemas.MachineType)
+def create_machine(machine_type: schemas.MachineType, db: Session = Depends(get_db)):
+    return dal.create_machine_type(db=db, machine_type=machine_type)

@@ -1,5 +1,23 @@
+from typing import Optional
+
 from pydantic import BaseModel
 from datetime import datetime
+
+
+class UserType(BaseModel):
+    id: str
+    description: str
+
+    class Config:
+        orm_mode = True
+
+
+class UserStatus(BaseModel):
+    id: str
+    description: str
+
+    class Config:
+        orm_mode = True
 
 
 class UserBase(BaseModel):
@@ -8,13 +26,16 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    pass
+    type_id: Optional[str] = None
+    status_id: Optional[str] = None
 
 
 class User(UserBase):
     id: int
     mobile: str
     name: str
+    type: Optional[UserType] = None
+    status: Optional[UserStatus] = None
 
     class Config:
         orm_mode = True
@@ -61,9 +82,27 @@ class RateCard(BaseModel):
         orm_mode = True
 
 
-class Machine(BaseModel):
+class Maker(BaseModel):
+    id: int
     name: str
+
+    class Config:
+        orm_mode = True
+
+
+class MachineModel(BaseModel):
+    id: int
+    maker: Maker
     type: MachineType
+    name: str
+
+    class Config:
+        orm_mode = True
+
+
+class Machine(BaseModel):
+    id: int
+    model: MachineModel
     rate_card: RateCard
     user: User
 
@@ -73,9 +112,11 @@ class Machine(BaseModel):
 
 class MachineCreate(BaseModel):
     type_id: str
+    model_id: int
     name: str
     rate_card_id: int
     user_id: int
+    mf_year: Optional[int] = None
 
 
 class PaymentType(BaseModel):

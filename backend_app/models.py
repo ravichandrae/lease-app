@@ -3,6 +3,20 @@ from sqlalchemy.orm import relationship
 from database import Base
 
 
+class UserStatus(Base):
+    __tablename__ = "user_status"
+
+    id = Column(String(2), primary_key=True, index=True)
+    description = Column(String(50))
+
+
+class UserType(Base):
+    __tablename__ = "user_type"
+
+    id = Column(String(2), primary_key=True, index=True)
+    description = Column(String(50))
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -11,7 +25,26 @@ class User(Base):
     mobile = Column(String(12), unique=True, index=True)
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
-    status_code = Column(String(2))
+    status_id = Column(String(2), ForeignKey('user_status.id'))
+    status = relationship(UserStatus)
+    type_id = Column(String(2), ForeignKey('user_type.id'))
+    type = relationship(UserType)
+
+
+class UserAddress(Base):
+    __tablename__ = "user_address"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    user = relationship(User)
+    city = Column(String(50))
+    division = Column(String(50))
+    subdivision = Column(String(50))
+    state = Column(String(50))
+    pin_code = Column(String(10))
+    country = Column(String(20))
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class MachineType(Base):
@@ -41,6 +74,8 @@ class MachineModel(Base):
     name = Column(String(50))
     type_id = Column(String(2), ForeignKey('machine_types.id'))
     type = relationship(MachineType)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class RateCardType(Base):
@@ -48,6 +83,8 @@ class RateCardType(Base):
 
     id = Column(String(2), primary_key=True, index=True)
     description = Column(String(50))
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class RateCard(Base):
@@ -59,6 +96,8 @@ class RateCard(Base):
     quantity = Column(Float)
     amount = Column(Float)
     currency = Column(String(3))
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class Machine(Base):
@@ -67,10 +106,13 @@ class Machine(Base):
     id = Column(Integer, primary_key=True, index=True)
     model_id = Column(Integer, ForeignKey('machine_models.id'))
     machine_model = relationship(MachineModel)
+    mf_year = Column(Integer)
     rate_card_id = Column(Integer, ForeignKey('rate_card.id'))
     rate_card = relationship(RateCard)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship(User)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class BookingStatus(Base):
@@ -78,6 +120,8 @@ class BookingStatus(Base):
 
     id = Column(String(2), primary_key=True, index=True)
     description = Column(String(50))
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class PaymentType(Base):
@@ -85,6 +129,8 @@ class PaymentType(Base):
 
     id = Column(String(2), primary_key=True, index=True)
     description = Column(String(50))
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class PaymentStatus(Base):
@@ -92,6 +138,8 @@ class PaymentStatus(Base):
 
     id = Column(String(2), primary_key=True, index=True)
     description = Column(String(50))
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class Payment(Base):
@@ -112,7 +160,7 @@ class Booking(Base):
     __tablename__ = "bookings"
 
     id = Column(Integer, primary_key=True, index=True)
-    machine_id = Column(Integer, ForeignKey('machine.id'))
+    machine_id = Column(Integer, ForeignKey('machines.id'))
     machine = relationship(Machine)
     from_date = Column(DateTime)
     to_date = Column(DateTime)
