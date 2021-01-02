@@ -41,7 +41,7 @@ class User(UserBase):
         orm_mode = True
 
 
-class UserLogin(UserBase):
+class UserLogin(BaseModel):
     mobile: str
     otp: str
 
