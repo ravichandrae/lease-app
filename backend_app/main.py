@@ -4,7 +4,9 @@ from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
-import models, schemas, dal
+import dal
+import models
+import schemas
 from database import engine, SessionLocal
 
 app = FastAPI()
@@ -74,3 +76,49 @@ def create_machine(machine: schemas.MachineCreate, db: Session = Depends(get_db)
 @app.post("/machine_types/", response_model=schemas.MachineType)
 def create_machine(machine_type: schemas.MachineType, db: Session = Depends(get_db)):
     return dal.create_machine_type(db=db, machine_type=machine_type)
+
+
+@app.post("/makers/", response_model=schemas.Maker)
+def create_machine(maker: schemas.MakerBase, db: Session = Depends(get_db)):
+    return dal.create_maker(db=db, maker=maker)
+
+
+@app.post("/machine_models/", response_model=schemas.MachineModel)
+def create_machine_model(machine_model: schemas.MachineModelCreate, db: Session = Depends(get_db)):
+    return dal.create_machine_model(db=db, machine_model=machine_model)
+
+
+@app.post("/rate_card_types/", response_model=schemas.RateCardType)
+def create_rate_card_type(rate_card_type: schemas.RateCardType, db: Session = Depends(get_db)):
+    return dal.create_rate_card_type(db=db, rate_card_type=rate_card_type)
+
+
+@app.post("/rate_cards/", response_model=schemas.RateCard)
+def create_rate_card(rate_card: schemas.RateCardCreate, db: Session = Depends(get_db)):
+    return dal.create_rate_card(db=db, rate_card=rate_card)
+
+
+@app.post("/booking_status/", response_model=schemas.BookingStatus)
+def create_booking_status(booking_status: schemas.BookingStatus, db: Session = Depends(get_db)):
+    return dal.create_booking_status(db=db, booking_status=booking_status)
+
+
+@app.post("/payment_types/", response_model=schemas.PaymentType)
+def create_payment_type(payment_type: schemas.PaymentType, db: Session = Depends(get_db)):
+    return dal.create_payment_type(db=db, payment_type=payment_type)
+
+
+@app.post("/payment_status/", response_model=schemas.PaymentStatus)
+def create_payment_status(payment_status: schemas.PaymentStatus, db: Session = Depends(get_db)):
+    return dal.create_payment_status(db=db, payment_status=payment_status)
+
+
+@app.post("/bookings/", response_model=schemas.Booking)
+def create_booking(booking_request: schemas.BookingRequest, db: Session = Depends(get_db)):
+    return dal.create_booking(db=db, booking_request=booking_request)
+
+
+@app.put("/bookings", response_model=schemas.Booking)
+def update_booking(booking_status_update: schemas.BookingStatusUpdate, db: Session = Depends(get_db)):
+    return dal.update_booking(db=db, booking_status_update=booking_status_update)
+

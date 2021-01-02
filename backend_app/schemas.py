@@ -72,6 +72,16 @@ class RateCardType(BaseModel):
         orm_mode = True
 
 
+class RateCardCreate(BaseModel):
+    type_id: str
+    quantity: float
+    amount: float
+    currency: str
+
+    class Config:
+        orm_mode = True
+
+
 class RateCard(BaseModel):
     type: RateCardType
     quantity: float
@@ -82,12 +92,21 @@ class RateCard(BaseModel):
         orm_mode = True
 
 
-class Maker(BaseModel):
-    id: int
+class MakerBase(BaseModel):
     name: str
+
+
+class Maker(MakerBase):
+    id: int
 
     class Config:
         orm_mode = True
+
+
+class MachineModelCreate(BaseModel):
+    maker_id: int
+    name: str
+    type_id: str
 
 
 class MachineModel(BaseModel):
@@ -111,9 +130,7 @@ class Machine(BaseModel):
 
 
 class MachineCreate(BaseModel):
-    type_id: str
     model_id: int
-    name: str
     rate_card_id: int
     user_id: int
     mf_year: Optional[int] = None
@@ -148,13 +165,29 @@ class Booking(BaseModel):
     machine: Machine
     from_date: datetime
     to_date: datetime
-    status_id: str
-    payment_id: int
-    start_date: datetime
-    end_date: datetime
+    status_id: Optional[str] = None
+    payment_id: Optional[int] = None
+    start_date: Optional[datetime] = None
+    end_date: Optional[datetime] = None
 
     class Config:
         orm_mode = True
+
+
+class BookingRequest(BaseModel):
+    machine_id: int
+    from_date: datetime
+    to_date: datetime
+
+
+class BookingStatusUpdate(BaseModel):
+    id: int
+    status_id: str
+
+
+class BookingPaymentUpdate(BaseModel):
+    id: int
+    payment_id: str
 
 
 class Payment(BaseModel):

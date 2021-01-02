@@ -105,7 +105,7 @@ class Machine(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     model_id = Column(Integer, ForeignKey('machine_models.id'))
-    machine_model = relationship(MachineModel)
+    model = relationship(MachineModel)
     mf_year = Column(Integer)
     rate_card_id = Column(Integer, ForeignKey('rate_card.id'))
     rate_card = relationship(RateCard)
