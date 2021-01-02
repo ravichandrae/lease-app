@@ -49,7 +49,7 @@ class UserLogin(BaseModel):
         orm_mode = True
 
 
-class UserLoginResponse(UserBase):
+class UserLoginResponse(BaseModel):
     message: str
 
     class Config:
