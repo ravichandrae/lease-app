@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from datetime import datetime
 
 
-class UserType(BaseModel):
+class UserStatus(BaseModel):
     id: str
     description: str
 
@@ -12,7 +12,7 @@ class UserType(BaseModel):
         orm_mode = True
 
 
-class UserStatus(BaseModel):
+class ProviderStatus(BaseModel):
     id: str
     description: str
 
@@ -25,16 +25,8 @@ class UserBase(BaseModel):
     name: str
 
 
-class UserCreate(UserBase):
-    type_id: Optional[str] = None
-    status_id: Optional[str] = None
-
-
 class User(UserBase):
     id: int
-    mobile: str
-    name: str
-    type: Optional[UserType] = None
     status: Optional[UserStatus] = None
 
     class Config:
@@ -54,6 +46,20 @@ class UserLoginResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class Provider(BaseModel):
+    id: int
+    name: str
+    mobile: str
+
+    class Config:
+        orm_mode = True
+
+
+class CreateProviderRequest(BaseModel):
+    name: str
+    mobile: str
 
 
 class MachineType(BaseModel):
@@ -83,6 +89,7 @@ class RateCardCreate(BaseModel):
 
 
 class RateCard(BaseModel):
+    id: int
     type: RateCardType
     quantity: float
     amount: float
@@ -123,7 +130,7 @@ class Machine(BaseModel):
     id: int
     model: MachineModel
     rate_card: RateCard
-    user: User
+    provider: Provider
 
     class Config:
         orm_mode = True
@@ -132,7 +139,7 @@ class Machine(BaseModel):
 class MachineCreate(BaseModel):
     model_id: int
     rate_card_id: int
-    user_id: int
+    provider_id: int
     mf_year: Optional[int] = None
 
 
@@ -162,20 +169,22 @@ class BookingStatus(BaseModel):
 
 class Booking(BaseModel):
     id: int
-    machine: Machine
+    machine: Optional[Machine] = None
     from_date: datetime
     to_date: datetime
     status_id: Optional[str] = None
     payment_id: Optional[int] = None
     start_date: Optional[datetime] = None
     end_date: Optional[datetime] = None
+    area: Optional[float] = None
+    amount: Optional[float] = None
 
     class Config:
         orm_mode = True
 
 
 class BookingRequest(BaseModel):
-    machine_id: int
+    machine_type_id: str
     from_date: datetime
     to_date: datetime
 
@@ -183,6 +192,23 @@ class BookingRequest(BaseModel):
 class BookingStatusUpdate(BaseModel):
     id: int
     status_id: str
+
+
+class AcceptBookingRequest(BaseModel):
+    id: int
+    status_id: str
+    machine_id: int
+
+
+class BookingStartRequest(BaseModel):
+    id: int
+    start_date: datetime
+
+
+class BookingEndRequest(BaseModel):
+    id: int
+    end_date: Optional[datetime] = None
+    area: Optional[float] = None
 
 
 class BookingPaymentUpdate(BaseModel):

@@ -8,13 +8,8 @@ class UserStatus(Base):
 
     id = Column(String(2), primary_key=True, index=True)
     description = Column(String(50))
-
-
-class UserType(Base):
-    __tablename__ = "user_type"
-
-    id = Column(String(2), primary_key=True, index=True)
-    description = Column(String(50))
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class User(Base):
@@ -23,12 +18,10 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50))
     mobile = Column(String(12), unique=True, index=True)
-    created_at = Column(DateTime)
-    updated_at = Column(DateTime)
     status_id = Column(String(2), ForeignKey('user_status.id'))
     status = relationship(UserStatus)
-    type_id = Column(String(2), ForeignKey('user_type.id'))
-    type = relationship(UserType)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
 
 
 class UserAddress(Base):
@@ -37,6 +30,43 @@ class UserAddress(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship(User)
+    city = Column(String(50))
+    division = Column(String(50))
+    subdivision = Column(String(50))
+    state = Column(String(50))
+    pin_code = Column(String(10))
+    country = Column(String(20))
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
+
+
+class ProviderStatus(Base):
+    __tablename__ = "provider_status"
+
+    id = Column(String(2), primary_key=True, index=True)
+    description = Column(String(50))
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
+
+
+class Provider(Base):
+    __tablename__ = "providers"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(50))
+    mobile = Column(String(12), unique=True, index=True)
+    status_id = Column(String(2), ForeignKey('provider_status.id'))
+    status = relationship(ProviderStatus)
+    created_at = Column(DateTime)
+    updated_at = Column(DateTime)
+
+
+class ProviderAddress(Base):
+    __tablename__ = "provider_address"
+
+    id = Column(Integer, primary_key=True, index=True)
+    provider_id = Column(Integer, ForeignKey('providers.id'))
+    provider = relationship(Provider)
     city = Column(String(50))
     division = Column(String(50))
     subdivision = Column(String(50))
@@ -109,8 +139,8 @@ class Machine(Base):
     mf_year = Column(Integer)
     rate_card_id = Column(Integer, ForeignKey('rate_card.id'))
     rate_card = relationship(RateCard)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship(User)
+    provider_id = Column(Integer, ForeignKey('providers.id'))
+    provider = relationship(Provider)
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
 
@@ -160,6 +190,8 @@ class Booking(Base):
     __tablename__ = "bookings"
 
     id = Column(Integer, primary_key=True, index=True)
+    machine_type_id = Column(String(2), ForeignKey('machine_types.id'))
+    machine_type = relationship(MachineType)
     machine_id = Column(Integer, ForeignKey('machines.id'))
     machine = relationship(Machine)
     from_date = Column(DateTime)
@@ -170,5 +202,7 @@ class Booking(Base):
     payment = relationship(Payment)
     start_date = Column(DateTime)
     end_date = Column(DateTime)
+    area = Column(Float)
+    amount = Column(Float)
     created_at = Column(DateTime)
     updated_at = Column(DateTime)
